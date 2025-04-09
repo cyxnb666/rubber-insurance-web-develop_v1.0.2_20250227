@@ -12,7 +12,7 @@
         <a-layout-content class="contentStyle">
           <a-tabs v-model:activeKey="state.menuKey" tab-position="top" @edit="tabEdit" @change="tabChange"
             :hideAdd="true" type="editable-card">
-            <a-tab-pane v-for="item in state.selectMenuList" :key="item.name" :tab="item.meta.title"
+            <a-tab-pane v-for="item in state.selectMenuList" :key="item.name" :tab="item.meta?.title"
               :closable="state.selectMenuList.length !== 1"></a-tab-pane>
           </a-tabs>
           <div class="routerView">
@@ -40,27 +40,32 @@ const router = useRouter()
 
 interface stateType {
   isCollapse: boolean,
-  selectMenuList: Array<Object>
+  menuKey: string,
+  selectMenuList: Array<any>
 }
 
-const state = reactive(<stateType>{
+const state = reactive<stateType>({
   isCollapse: false,
   menuKey: '',
   selectMenuList: [],
 });
+
+// 监听路由变化，更新标签页
 watch(
   () => route,
-  (_val) => {
-    const obj = { ..._val }
+  (newRoute) => {
+    const obj = { ...newRoute }
     const flag = state.selectMenuList.some((item: any) => {
       return item.name === obj.name
     })
     if (!flag) state.selectMenuList.push(obj)
-    state.menuKey = obj.name
+    state.menuKey = obj.name as string
   },
   { deep: true, immediate: true }
 );
-const tabEdit: TabsProps['onEdit'] = val => {
+
+// 标签页编辑（关闭）
+const tabEdit: TabsProps['onEdit'] = (val) => {
   const index = state.selectMenuList.findIndex((item: any) => {
     return item.name === val
   })
@@ -75,10 +80,14 @@ const tabEdit: TabsProps['onEdit'] = val => {
     }
   }
 };
-const tabChange: TabsProps['onTabClick'] = val => {
+
+// 标签页切换
+const tabChange: TabsProps['onChange'] = (val) => {
   router.push({ name: val as string })
 };
+
 onMounted(() => {
+  // 初始化逻辑（如需要）
 })
 </script>
 
@@ -91,7 +100,6 @@ onMounted(() => {
 
     .siderStyle {
       text-align: center;
-      line-height: 120px;
       color: #fff;
       background-color: #fff;
       flex: 0 0 220px !important;
@@ -111,7 +119,6 @@ onMounted(() => {
 
     .isCollapseStyle {
       text-align: center;
-      line-height: 120px;
       color: #fff;
       background-color: #fff;
       flex: 0 0 80px !important;
@@ -149,13 +156,13 @@ onMounted(() => {
       .routerView {
         height: calc(100% - 50px);
         background-color: #F3F5F9;
-        padding: 20px;
       }
     }
   }
 }
-:deep(:where(.css-dev-only-do-not-override-1o9a95k).ant-tabs-card > .ant-tabs-nav .ant-tabs-tab,
-      :where(.css-dev-only-do-not-override-1o9a95k).ant-tabs-card > div > .ant-tabs-nav .ant-tabs-tab) {
+
+:deep(.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab,
+      .ant-tabs-card > div > .ant-tabs-nav .ant-tabs-tab) {
   border: none !important;
 }
 </style>

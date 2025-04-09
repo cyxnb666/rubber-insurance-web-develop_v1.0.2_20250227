@@ -1,5 +1,5 @@
 <template>
-  <a-config-provider :locale="zhCN" :theme="state.theme">
+  <a-config-provider :locale="zhCN" :theme="theme">
     <router-view></router-view>
   </a-config-provider>
 </template>
@@ -7,22 +7,16 @@
 import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
 import zhCN from 'ant-design-vue/es/locale/zh_CN';
-import {reactive} from "vue";
+import { reactive } from "vue";
 
 dayjs.locale("zh-cn");
 
-interface stateType {
-  theme: object
-}
-
-const state = reactive(<stateType>{
-  theme: {
-    token: {
-      colorPrimary: '#46B180',
-      colorLink: '#46B180',
-    }
+const theme = reactive({
+  token: {
+    colorPrimary: '#46B180',
+    colorLink: '#46B180',
   }
-})
+});
 </script>
 <style lang="scss">
 html, body {
@@ -35,25 +29,19 @@ html, body {
 }
 
 ::-webkit-scrollbar {
-  width: 0.107rem;
-  height: 0.107rem;
-  background-color: rgba(0, 0, 0, .2);
+  width: 6px;
+  height: 6px;
+  background-color: rgba(0, 0, 0, .1);
 }
 
 ::-webkit-scrollbar-track {
-  // -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  border-radius: 0.133rem;
-  background-color:#F6F7FA;
+  border-radius: 3px;
+  background-color: #F6F7FA;
 }
 
 ::-webkit-scrollbar-thumb {
-  border-radius: 0.133rem;
-  -webkit-box-shadow: inset 0 0 6px rgba(103, 103, 103, 0.3);
-  background-color: #f7f4f4;
-}
-
-.ant-modal-root div[aria-hidden="true"] {
-  display: none !important;
+  border-radius: 3px;
+  background-color: #ccc;
 }
 
 .ant-modal-content {
@@ -86,36 +74,8 @@ html, body {
   }
 }
 
-input:-webkit-autofill {
-
-  -webkit-box-shadow: 0 0 0 1000px white inset;
-
-  -webkit-text-fill-color: #333;
-
-}
-.ant-btn,.ant-input-affix-wrapper{
+.ant-btn, .ant-input-affix-wrapper, .ant-select-single .ant-select-selector, 
+.ant-input-number, .ant-picker {
   border-radius: 2px;
-}
-.ant-select-single .ant-select-selector {
-  border-radius: 2px;
-}
-.ant-input-number .ant-input-number-input {
-  border-radius: 2px;
-}
-.ant-picker {
-  border-radius: 2px;
-}
-::-webkit-scrollbar {
-  width: 6.5px;
-  height: 6.5px;
-}
-.ant-tabs-card.ant-tabs-top >.ant-tabs-nav .ant-tabs-tab {
-  border-radius: 10px 10px 0 0;
-}
-.ant-menu-light.ant-menu-inline .ant-menu-sub.ant-menu-inline{
-  background: rgba(70, 177, 128, 0.08);
-}
-.ant-tabs-tab.ant-tabs-tab-with-remove{
-  // background: #E0E2E4 !important;
 }
 </style>

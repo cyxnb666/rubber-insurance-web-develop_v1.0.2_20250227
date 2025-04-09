@@ -13,16 +13,11 @@
     "autofit.js": "^3.2.3",
     "axios": "^1.6.2",
     "buffer": "^6.0.3",
-    "echarts": "^5.6.0",
-    "leaflet": "^1.9.4",
     "lib-flexible": "^0.3.2",
     "lodash": "^4.17.21",
     "nprogress": "^0.2.0",
-    "pinia": "^2.1.7",
     "screenfull": "^6.0.2",
-    "sm-crypto": "^0.3.13",
     "vue": "^3.3.11",
-    "vue-media": "^1.1.1",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {

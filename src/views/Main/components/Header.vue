@@ -1,20 +1,17 @@
 <template>
   <div class="HeaderView">
     <div class="projectIconAndTitle">
-      <img class="projectIcon" src="../../../assets/images/pageLogo.png" alt="">
+      <div class="projectTitle">管理系统</div>
     </div>
     <a-dropdown>
       <a class="ant-dropdown-link" @click.prevent>
         您好! {{ userName }}
-        <DownOutlined />
+        <down-outlined />
       </a>
       <template #overlay>
         <a-menu>
-          <!-- <a-menu-item>
-            <a href="javascript:;" style="color: #46B180" @click="editPassword">修改密码</a>
-          </a-menu-item> -->
           <a-menu-item>
-            <a href="javascript:;" style="color: red" @click="outLogin">退出登录</a>
+            <a href="javascript:;" @click="outLogin">退出登录</a>
           </a-menu-item>
         </a-menu>
       </template>
@@ -24,22 +21,16 @@
 
 <script lang="ts" setup>
 import { DownOutlined } from '@ant-design/icons-vue';
-import {onMounted, ref} from "vue";
-import { logout } from './api';
+import { onMounted, ref } from "vue";
 import { useRouter } from 'vue-router';
-const router = useRouter();
 import { message } from 'ant-design-vue';
-import { sessionManager } from '@/utils/sessionManager';
 
-const userName = ref('管理员')
-const editPassword = () => {
-  console.log('editPassword')
-}
+const router = useRouter();
+const userName = ref('管理员');
+
 const outLogin = async () => {
   try {
-    await logout();
-    sessionManager.clearSession();
-    // 清除登录信息
+    // 清除登录信息（简化版不需要API调用）
     sessionStorage.clear();
     message.success('退出成功');
     // 跳转到登录页
@@ -47,10 +38,20 @@ const outLogin = async () => {
   } catch (error) {
     console.error('退出失败:', error);
   }
-}
-onMounted(()=>{
-  userName.value = JSON.parse(sessionStorage.getItem('userInfo') || '{}').username
-})
+};
+
+onMounted(() => {
+  // 从sessionStorage获取用户信息（如果存在）
+  const userInfo = sessionStorage.getItem('userInfo');
+  if (userInfo) {
+    try {
+      const parsedInfo = JSON.parse(userInfo);
+      userName.value = parsedInfo.username || '管理员';
+    } catch (e) {
+      console.error('解析用户信息失败', e);
+    }
+  }
+});
 </script>
 
 <style lang="scss" scoped>
@@ -63,9 +64,14 @@ onMounted(()=>{
   align-items: center;
 
   .projectIconAndTitle {
-    .projectIcon {
-      height: 36px;
-      margin-left: 20px;
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+
+    .projectTitle {
+      color: #FFFFFF;
+      font-size: 20px;
+      font-weight: bold;
     }
   }
 
@@ -76,5 +82,4 @@ onMounted(()=>{
     font-weight: 400;
   }
 }
-
 </style>

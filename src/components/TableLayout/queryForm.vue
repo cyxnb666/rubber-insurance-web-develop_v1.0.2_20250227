@@ -41,7 +41,6 @@
 import { ref, inject, h } from 'vue';
 import { SearchOutlined, RedoOutlined } from '@ant-design/icons-vue';
 import InputRange from '../InputRange/index.vue'
-import { getCultivarCollection } from "@/views/FarmerPlantingManagement/api.ts";
 import { log } from 'console';
 
 const formRef = ref();

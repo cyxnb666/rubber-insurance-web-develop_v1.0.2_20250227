@@ -17,9 +17,9 @@ export default defineConfig({
     resolve: {
         alias
     },
-    base: '/rubber_insurance_web/',
+    base: '/test_web/',
     build: {
-        outDir: 'rubber_insurance_web'
+        outDir: 'test_web'
     },
     server: {
         host: true,
@@ -27,9 +27,7 @@ export default defineConfig({
         cors: true,
         proxy: {
             '/baseURL': {
-                target: 'http://192.168.8.181:8098/picc_rubber/',
-                // target: 'http://192.168.8.195:8098/picc_rubber/',
-                // target: 'http://crm.piccyn.com:9527/picc_rubber/',
+                target: 'http://crm.piccyn.com:9527/picc_rubber/',
                 changeOrigin: true,
                 rewrite: (path) => path.replace('/baseURL', '')
             }

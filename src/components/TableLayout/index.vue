@@ -1,7 +1,8 @@
 <template>
   <div class="table_layout_container">
     <div class="table_form">
-      <QueryForm @onSearch="onSearch" v-if="state.showQuery" :defaultValues="defaultValues" :labelCol="tableData.labelCol">
+      <QueryForm @onSearch="onSearch" v-if="state.showQuery" :defaultValues="defaultValues"
+        :labelCol="tableData.labelCol">
         <template #otherButton>
           <slot name="otherButton"></slot>
         </template>
@@ -10,11 +11,11 @@
     <div class="table_body_wrap">
       <div class="table-content">
         <a-table :dataSource="tableData.dataSource" :columns="tableData.columns" :loading="tableData.loading"
-                 :row-selection="tableData.rowSelection" :row-key="tableData.rowKey"
-                 :pagination="tableData.pagination" @change="tableChange" @resizeColumn="handleResizeColumn" :scroll="{ y: state.tableHeight-55 }"
-                 style="height: 100%;">
+          :row-selection="tableData.rowSelection" :row-key="tableData.rowKey" :pagination="tableData.pagination"
+          @change="tableChange" @resizeColumn="handleResizeColumn" :scroll="{ y: state.tableHeight - 55 }"
+          style="height: 100%;">
           <template #bodyCell="{ column, record }">
-            <slot v-if="column.key === 'operator'" name="operator" :record="record"/>
+            <slot v-if="column.key === 'operator'" name="operator" :record="record" />
           </template>
         </a-table>
       </div>
@@ -23,7 +24,7 @@
 </template>
 
 <script lang="ts" setup>
-import {inject, onBeforeUnmount, onMounted, reactive, nextTick, provide} from "vue";
+import { inject, onBeforeUnmount, onMounted, reactive, nextTick, provide } from "vue";
 import QueryForm from "./queryForm.vue";
 
 provide('span', 6);
@@ -60,14 +61,14 @@ const setTableHeight = async () => {
   const tableLayoutContainer = document.querySelector('.table_layout_container');
   const tableForm = document.querySelector('.table_form');
   const tableBodyWrapDom = document.querySelector('.table_body_wrap');
-  
+
   if (tableLayoutContainer && tableForm && tableBodyWrapDom) {
     // 获取整个容器的高度
     const tableLayoutHeight = tableLayoutContainer.clientHeight;
     const tableFormHeight = tableForm.clientHeight;
     tableBodyWrapDom.style.height = `${tableLayoutHeight - tableFormHeight - 20}px`;
     state.tableHeight = tableLayoutHeight - tableFormHeight - 20;
-    
+
     setTimeout(() => {
       const tableBody = document.querySelector('.ant-table-body');
       if (tableBody) {
@@ -112,11 +113,12 @@ onBeforeUnmount(() => {
 :deep(.ant-pagination) {
   // margin: 20px 0 0 0 !important;
 }
-::v-deep .ant-table-wrapper .ant-table-pagination.ant-pagination {
+
+:deep(.ant-table-wrapper .ant-table-pagination.ant-pagination) {
   margin: 0 !important;
 }
 
-::v-deep .ant-table-tbody tr {
+:deep(.ant-table-tbody tr) {
   height: 42px;
 
   .ant-table-cell {
@@ -125,17 +127,19 @@ onBeforeUnmount(() => {
   }
 }
 
-::v-deep .ant-table-tbody {
+:deep(.ant-table-tbody) {
   tr:nth-child(odd) {
     background-color: #F6F7FA;
+
     .ant-table-cell-fix-left,
     .ant-table-cell-fix-right {
       background-color: #F6F7FA;
     }
   }
-  
+
   tr:nth-child(even) {
     background-color: #FFFFFF;
+
     .ant-table-cell-fix-left,
     .ant-table-cell-fix-right {
       background-color: #FFFFFF;
@@ -143,7 +147,7 @@ onBeforeUnmount(() => {
   }
 }
 
-::v-deep .ant-table-thead tr {
+:deep(.ant-table-thead tr) {
   height: 42px;
 
   .ant-table-cell {
@@ -153,17 +157,9 @@ onBeforeUnmount(() => {
   }
 }
 
-// ::v-deep .ant-table-tbody tr:nth-child(2n-1) {
-//   background-color: #F6F7FA;
-//   .ant-table-cell-fix-left {
-//     background-color: #F6F7FA;
-//   }
-//   .ant-table-cell-fix-right{
-//     background-color: #F6F7FA;
-//   }
-// }
-::v-deep .ant-table-tbody tr {
+:deep(.ant-table-tbody tr) {
   background-color: #F6F7FA;
+
   .ant-table-cell-fix-left,
   .ant-table-cell-fix-right {
     background-color: #F6F7FA;
