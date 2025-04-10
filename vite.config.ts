@@ -1,6 +1,6 @@
-import {defineConfig} from 'vite'
+import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import {resolve} from 'path'
+import { resolve } from 'path'
 
 const pathResolve = (dir: string): any => {
     return resolve(__dirname, ".", dir)
@@ -20,6 +20,13 @@ export default defineConfig({
     base: '/test_web/',
     build: {
         outDir: 'test_web'
+    },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                api: "modern-compiler"
+            }
+        }
     },
     server: {
         host: true,
