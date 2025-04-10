@@ -9,6 +9,9 @@
 import { reactive, watch, h, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 
+// 预加载 SVG 图标文件
+const iconModules = import.meta.glob('../../../assets/images/*.svg', { eager: true });
+
 const router = useRouter();
 const route = useRoute();
 
@@ -32,7 +35,6 @@ const props = defineProps({
 
 // 根据路由表设置菜单项
 const setRoutes = () => {
-  // 获取路由表中的主路由（通常是Layout包含的子路由）
   const mainRoute = router.options.routes.find(route => route.name === 'Main');
   if (!mainRoute || !mainRoute.children) return;
 
@@ -40,12 +42,53 @@ const setRoutes = () => {
     return array.map((item: any) => {
       const { children, meta } = item;
 
-      // 创建菜单项
+      // 获取图标 URL
+      const getIconUrl = (iconName) => {
+        // 尝试通过glob获取图标
+        const iconPath = `../../../assets/images/${iconName}.svg`;
+        if (iconModules[iconPath]) {
+          return iconModules[iconPath].default;
+        }
+        // 回退方案：如果找不到图标，可以返回一个默认图标
+        console.warn(`Icon not found: ${iconName}`);
+        return '';
+      };
+
+      let iconUrl = '';
+      let selectedIconUrl = '';
+
+      if (meta?.icon) {
+        iconUrl = getIconUrl(meta.icon);
+
+        // 尝试获取选中状态的图标，如果没有就使用普通图标
+        const selectedIconPath = `../../../assets/images/selected_${meta.icon}.svg`;
+        if (iconModules[selectedIconPath]) {
+          selectedIconUrl = iconModules[selectedIconPath].default;
+        } else {
+          selectedIconUrl = iconUrl;
+        }
+      }
+
       return {
         key: item.name,
         label: meta?.title || item.name,
         title: meta?.title || item.name,
-        icon: meta?.icon ? () => h('span', { class: `menu-icon ${meta.icon}` }) : null,
+        icon: meta?.icon ? (value: any) => {
+          const selectedKey = state.selectedKeys[0];
+          const key = value.children && value.children.length
+            ? value.children.find((subItem: any) => subItem.key === selectedKey)?.key
+            : value.key;
+
+          // 根据是否选中使用不同的图标
+          const url = selectedKey === key ? selectedIconUrl : iconUrl;
+
+          if (url) {
+            return h('img', { src: url, width: '16px', height: '16px', class: 'menu-icon' });
+          }
+
+          // 如果没有图标，可以使用一个默认图标或返回 null
+          return null;
+        } : null,
         children: children && children.length ? traverse(children) : null,
       };
     });
@@ -60,7 +103,7 @@ const clickMenu = (item: any) => {
   router.push({ name: key });
 };
 
-// 监听openKeys变化
+// 监听 openKeys 变化
 watch(
   () => state.openKeys,
   (_val, oldVal) => {
@@ -68,7 +111,7 @@ watch(
   },
 );
 
-// 监听路由变化，更新selectedKeys
+// 监听路由变化，更新 selectedKeys
 watch(
   () => route,
   (_val) => {
@@ -77,7 +120,7 @@ watch(
   { deep: true, immediate: true }
 );
 
-// 监听折叠状态
+// 处理折叠状态变化
 watch(
   () => props.isCollapse,
   (val) => {
@@ -116,6 +159,5 @@ onMounted(() => {
 
 .menu-icon {
   margin-right: 8px;
-  font-size: 16px;
 }
 </style>
